@@ -71,19 +71,22 @@
             <h1 class="my-4">詳しい使い方</h1>
             <ol>
               <li class="my-2">
-                まず、ソートする写真が入ったフォルダを選択して下さい。システム上、指定したフォルダの直下にあるファイルだけを数えます。指定したフォルダの中のフォルダの写真とかは無視しますのでお気を付けください。写真じゃないファイル（.txt等）にも反応するので、写真以外は入れないようにしてください（右上の数字がバグるかと）。
+                まず、ソートする写真が入ったフォルダを選択して下さい。システム上、指定したフォルダの直下にあるファイルだけを認識します。指定したフォルダの中のフォルダの写真とかは無視しますのでお気を付けください。写真じゃないファイル（.txt等）にも反応するので、写真以外は入れないようにしてください（右上の数字がバグるかと）。
               </li>
               <li class="my-2">
                 写真を出力する元フォルダを選択してください。選択したフォルダ内にあるすべてのフォルダを選択肢として、下にカラフルに表示するになっています。一度フォルダを表示したあと、色が揃うようにソートされるはずです。されなかったら、右上にある「フォルダソート」ボタンを押して下さい。
               </li>
               <li class="my-2">
-                右上に写真が表示されるので、その写真を入れたいフォルダを下のカラフルなフォルダ群からすべて選択してください。入れたいフォルダがない！　といった時は、「フォルダを追加する」ボタンを押してください。追加したいフォルダの位置と、追加したいフォルダ名を入力する画面があるので、それぞれを入力して ADD FOLDER を押すと（フォルダ名入力 ＋ Enterでもいけます）フォルダが追加された上で、カラフルフォルダ群がリセットされます。ソートされない場合は右上のボタンを押してください。
+                右上に写真が表示されるので、その写真を入れたいフォルダを下のカラフルなフォルダ群からすべて選択してください。写真が横向きにしか表示されないのは仕様です（ごめんなさい）。入れたいフォルダがない！　といった時は、「フォルダを追加する」ボタンを押してください。追加したいフォルダの位置と、追加したいフォルダ名を入力する画面があるので、それぞれを入力して ADD FOLDER を押すと（フォルダ名入力 ＋ Enterでもいけます）フォルダが追加された上で、カラフルフォルダ群がリセットされます。ソートされない場合は右上のボタンを押してください。
               </li>
               <li class="my-2">
                 写真をコピーするフォルダを選択し終えたら右上の青いボタン「フォルダにコピー」を押してください。選択したフォルダに写真がコピーされ、フォルダ群のチェックがはずれ、次の写真が表示されます。そしたら、また手順3から進んでください。
               </li>
               <li class="my-2">
                 右上には今何枚目の写真（正確にはファイル）かが表示されます。「戻る」「進む」ボタンで前後の写真に進むことができます。なお、「フォルダにコピー」はフォルダを選択してないと通知だけでて何もおきません。次の写真に進みたい場合は、「進む」ボタンをお使いください。
+              </li>
+              <li class="my-2">
+                最後の写真まで進むと通知がでて写真が変わらなくなるので、ソートする写真が入ったフォルダを選択し直してください。
               </li>
             </ol>
             <h2 class="my-3">補足</h2>
@@ -94,7 +97,14 @@
               <li class="my-2">
                 画面幅600pxぐらいまではレスポンシブ対応っぽいことをしましたが、おとなしく大画面で使ってください…。960px以上推奨です。
               </li>
+              <li class="my-2">
+                なんか動かないなーって時は、再起動とかいろんなボタン押してみるとか、頑張って下さい（笑）再現性のあるバグだったら報告していただければ対応するかもしれません。
+              </li>
             </ul>
+            <p class="my-3">
+              制作：山本恒輔（MF93 it@App）<br>
+              お問い合わせ：k-yamamoto93@g.ecc.u-tokyo.ac.jp, もしくは任意のSNS
+            </p>
           </v-card-text>
         </v-card>
       </div>
@@ -184,7 +194,7 @@ export default {
       return ret;
     },
     setInputFolder(folder){
-      console.log("setInputImage");
+      // console.log("setInputImage");
       this.num = 0;
       if(folder == null) return 0;
       this.files.length = 0;
@@ -200,7 +210,7 @@ export default {
       })
     },
     setOutputFolder(folder){
-      console.log("setOutputImage");
+      // console.log("setOutputImage");
       this.folder_tree.length = 0;
       if(folder == null) return 0;
       this.output_folder = folder.path;
@@ -258,13 +268,13 @@ export default {
       })
     },
     sortFoldertree(){
-      console.log("sortFoldertree")
+      // console.log("sortFoldertree")
       this.folder_tree.sort((a,b)=>{
         return a.path > b.path ? 1 : -1
       })
     },
     popAddFolder(flag){
-      console.log("popAddFolder");
+      // console.log("popAddFolder");
       const form = document.getElementById("addFolder-wrapper");
       if(flag){
         form.style.display = "block";
@@ -273,19 +283,19 @@ export default {
       }
     },
     setAddFolder(folder){
-      console.log("setAddFolder");
+      // console.log("setAddFolder");
       if(folder == null) return 0;
       this.add_folder_path = folder.path
     },
     addFolder(){
-      console.log("addFolder");
+      // console.log("addFolder");
       if(this.add_folder_path == "" || this.add_folder_name == ""){
         alert("select an add folder path and addfolder name");
         return 0;
       }
       fs.mkdir(this.add_folder_path + "\\" + this.add_folder_name, (err)=>{
         if(err) throw err;
-        else console.log("folder add succeeded!");
+        // else console.log("folder add succeeded!");
         this.add_folder_name = "";
       })
       const tmp_folder = {
@@ -295,7 +305,7 @@ export default {
       this.setOutputFolder(tmp_folder);
     },
     popImage(flag){
-      console.log("popImage");
+      // console.log("popImage");
       const popup = document.getElementById("popup");
       if(flag){
         popup.style.display = "block";
@@ -304,7 +314,7 @@ export default {
       }
     },
     copyFile(){
-      console.log("copyFile");
+      // console.log("copyFile");
       const file = "\\" + this.files[this.num];
       let paths = [];
       for(let folder of this.folder_tree){
@@ -320,13 +330,13 @@ export default {
       for(let path of paths){
         fs.copyFile(this.input_folder + file, this.output_folder + path + file, fs.constants.COPYFILE_EXCL, (err) =>{
         if(err) throw err;
-        else console.log('file copy succeeded!');
+        // else console.log('file copy succeeded!');
         })
       }
       this.changeImage(1);
     },
     changeImage(d){
-      console.log("changeImage");
+      // console.log("changeImage");
       this.num += d;
       if(this.num < 0){
         this.num = 0;
@@ -340,7 +350,7 @@ export default {
       this.showImage();
     },
     showImage(){ // 横向き問題未解決
-      console.log("showImage");
+      // console.log("showImage");
       const canvas = document.getElementById("canvas");
       let context = canvas.getContext("2d");
       const p_canvas = document.getElementById("popup-canvas");
@@ -375,7 +385,7 @@ export default {
       path = this.input_folder + "\\" + this.files[this.num+1];
     },
     showDetails(flag){
-      console.log("showDetails");
+      // console.log("showDetails");
       const details = document.getElementById("details");
       if(flag){
         details.style.display = "block";
