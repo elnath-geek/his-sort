@@ -144,6 +144,7 @@
 <script>
 // import HelloWorld from "./components/HelloWorld";
 import * as fs from "fs"
+import path from "path"
 
 export default {
   name: "App",
@@ -224,16 +225,16 @@ export default {
           })
           for(const dirent of dirents){
             if(dirent.isDirectory()){
-              const path = "/" + dirent.name
+              const dir_path = dirent.name
               const data = {
-                path: path,
+                path: dir_path,
                 name: dirent.name,
                 flag: false,
                 color: color_num,
                 depth: 0
               }
               this.folder_tree.push(data);
-              this.searchFolder(path, color_num, depth+1)
+              this.searchFolder(dir_path, color_num, depth+1)
               color_num++;
             }
           }
@@ -243,13 +244,13 @@ export default {
         this.sortFoldertree()
       }, 3000)
     },
-    searchFolder(path, color_num, depth){
-      fs.readdir(this.output_folder + path, {withFileTypes: true}, (err, dirents)=>{
+    searchFolder(dir_path, color_num, depth){
+      fs.readdir(path.join(this.output_folder, dir_path), {withFileTypes: true}, (err, dirents)=>{
         if(err) throw err;
         else{
           for(const dirent of dirents){
             if(dirent.isDirectory()){
-              const new_path = path + "/" + dirent.name
+              const new_path = path.join(dir_path, dirent.name)
               const data = {
                 path: new_path,
                 name: dirent.name,
@@ -261,9 +262,6 @@ export default {
               this.searchFolder(new_path, color_num, depth+1)
             }
           }
-          // this.folder_tree.sort((a,b)=>{
-          //   return a.path > b.path ? 1 : -1
-          // })
         }
       })
     },
@@ -293,7 +291,8 @@ export default {
         alert("select an add folder path and addfolder name");
         return 0;
       }
-      fs.mkdir(this.add_folder_path + "\\" + this.add_folder_name, (err)=>{
+      const mkdir_path = path.join(this.add_folder_path, this.add_folder_name)
+      fs.mkdir(mkdir_path, (err)=>{
         if(err) throw err;
         // else console.log("folder add succeeded!");
         this.add_folder_name = "";
@@ -315,11 +314,11 @@ export default {
     },
     copyFile(){
       // console.log("copyFile");
-      const file = "\\" + this.files[this.num];
+      const file = this.files[this.num];
       let paths = [];
       for(let folder of this.folder_tree){
         if(folder.flag) {
-          paths.push( "\\" + folder.path);
+          paths.push(folder.path);
           folder.flag = false;
         }
       }
@@ -327,8 +326,8 @@ export default {
         alert("file is not selected")
         return 0;
       }
-      for(let path of paths){
-        fs.copyFile(this.input_folder + file, this.output_folder + path + file, fs.constants.COPYFILE_EXCL, (err) =>{
+      for(let folder_path of paths){
+        fs.copyFile( path.join(this.input_folder, file), path.join(this.output_folder, folder_path, file), fs.constants.COPYFILE_EXCL, (err) =>{
         if(err) throw err;
         // else console.log('file copy succeeded!');
         })
@@ -357,8 +356,8 @@ export default {
       let p_context = p_canvas.getContext("2d");
       let image = new Image();
       let p_image = new Image();
-      let path = this.input_folder + "\\" + this.files[this.num];
-      fs.readFile(path, (err, data)=>{
+      const photo_path = path.join(this.input_folder, this.files[this.num]);
+      fs.readFile(photo_path, (err, data)=>{
         if (err) throw err;
         const base64_data = "data:image/jpeg;base64," + data.toString( 'base64' );
         image.src = base64_data;
@@ -382,7 +381,6 @@ export default {
           p_context.drawImage(p_image, 0, 0, image.width, image.height, 0, 0, canvas_width, canvas_height);
         }
       })
-      path = this.input_folder + "\\" + this.files[this.num+1];
     },
     showDetails(flag){
       // console.log("showDetails");
