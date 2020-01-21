@@ -438,7 +438,7 @@ export default {
 }
 #popup-canvas{
   position: absolute;
-  top: 10%;
+  top: 80px;
   left: 10%;
   right: 10%;
   bottom: 10%;
