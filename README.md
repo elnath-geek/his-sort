@@ -1,5 +1,18 @@
 # his-sort
 
+ググドラ上のファイル（写真）をプレビューしながらフォルダ分けするためのソフトです
+誰でも使ってどうぞ
+
+なんかバグってる、ビルドし直すぞの人は以下のコマンドでお願いします～
+
+git clone git@github.com:elnath-geek/his-sort.git
+npm install
+elctron:build 
+
+// package.json 読めばわかるけどね
+
+開発したい人はフォークでもして開発すればいいと思います
+
 ## Project setup
 ```
 npm install
